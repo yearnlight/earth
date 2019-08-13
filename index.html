@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>旋涡</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="static/img/favicon.ico" rel="icon" type="image/x-icon" />
+
+        <meta property="og:title" content="GlobeKit" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://globekit.co/" />
+        <meta property="og:image" content="http://globekit.co/static/img/sharing/hero.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:description" content="GlobeKit is a visualization platform that can turn geographic data into stunning interactive experiences." />
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@GlobeKit">
+        <meta name="twitter:creator" content="@letsgorally">
+        <meta name="twitter:title" content="GlobeKit">
+        <meta name="twitter:description" content="GlobeKit is a visualization platform that can turn geographic data into stunning interactive experiences.">
+        <meta name="twitter:image" content="http://globekit.co/static/img/sharing/hero.jpg">
+
+        <!-- ###BeginUncompressedCSS### -->
+        <link href="static/css/desktop.css" rel="stylesheet">
+        <link href="static/css/mobile.css" rel="stylesheet">
+        <!-- ###EndUncompressedCSS### -->
+
+        <!-- ###BeginCompressedCSS### -->
+        <!--<link href="/static/minified/globekit-styles.min.css" rel="stylesheet">-->
+        <!-- ###EndCompressedCSS### -->
+
+        <!-- ###BeginUncompressedJS### -->
+        <script src="static/js/Site.js"></script>
+        <script src="static/js/FormManager.js"></script>
+        <script src="static/js/DataManager.js"></script>
+        <script src="static/js/ModelManager.js"></script>
+        <script src="static/js/ScrollManager.js"></script>
+        <script src="static/js/CanvasManager.js"></script>
+
+        <script src="static/js/globekit/third-party/gl-matrix.js"></script>
+        <script src="static/js/globekit/rendering/Camera.js"></script>
+        <script src="static/js/globekit/rendering/Program.js"></script>
+        <script src="static/js/globekit/rendering/ProgramManager.js"></script>
+        <script src="static/js/globekit/rendering/TextureManager.js"></script>
+        <script src="static/js/globekit/drawables/PointGlobeDrawable.js"></script>
+        <script src="static/js/globekit/drawables/NebulaDrawable.js"></script>
+        <script src="static/js/globekit/drawables/BokehDrawable.js"></script>
+        <script src="static/js/globekit/drawables/BackgroundDrawable.js"></script>
+        <script src="static/js/globekit/drawables/RingDrawable.js"></script>
+        <script src="static/js/globekit/drawables/EarthquakeDrawable.js"></script>
+        <script src="static/js/globekit/drawables/BigQuakeDrawable.js"></script>
+        <script src="static/js/globekit/geometry/Model.js"></script>
+        <script src="static/js/globekit/utils/LatLng.js"></script>
+        <script src="static/js/globekit/utils/ProjectionUtil.js"></script>
+
+        <script src="static/js/third-party/brandkit/Animation.js"></script>
+        <script src="static/js/third-party/brandkit/Ease.js"></script>
+        <script src="static/js/third-party/brandkit/Ajax.js"></script>
+        <script src="static/js/third-party/brandkit/Signal.js"></script>
+        <script src="static/js/third-party/greensock/SplitText.js"></script>
+        <script src="static/js/third-party/greensock/TweenMax.js"></script>
+        <!-- ###EndUncompressedJS### -->
+
+        <!-- ###BeginCompressedJS### -->
+        <!--<script src="/static/minified/globekit-js.min.js"></script>-->
+        <!-- ###EndCompressedJS### -->
+    </head>
+
+    <body>
+        <div id="quake-info"><div><span></span></div></div>
+
+        <canvas id="globekit-canvas" width="1024" height="1024"></canvas>
+
+        <div id="mouse-indicator">
+            <div id="mouse-wheel">
+                <div class="mouse-outline">
+                    <svg width="18px" height="30px">
+                        <path fill="#fff" d="M729,903.789v9.419a9.009,9.009,0,1,0,18,0v-9.419A9.009,9.009,0,1,0,729,903.789Zm9-7.327a7.19,7.19,0,0,1,7,7.327v9.419a7.007,7.007,0,1,1-14,0v-9.419A7.19,7.19,0,0,1,738,896.462Z" transform="translate(-729 -894.375)"/>
+                    </svg>
+                </div>
+                <div class="wheel animate">
+                    <svg width="2px" height="6px">
+                        <path fill="#fff" d="M738,905.358a1.027,1.027,0,0,0,1-1.046v-3.14a1,1,0,1,0-2,0v3.14A1.027,1.027,0,0,0,738,905.358Z" transform="translate(-737 -900.125)"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            Site.init();
+
+            WebFontConfig = {
+                google: {
+                    families: ["Roboto:100,300,500:latin"]
+                },
+                /* Called when all the specified web-font provider modules (google, typekit, and/or custom) have reported that they have started loading fonts. */
+                loading: function() {
+                    // do something
+                },
+                /* Called when each requested web font has started loading. The fontFamily parameter is the name of the font family, and fontDescription represents the style and weight of the font. */
+                fontloading: function(fontFamily, fontDescription) {
+                    // do something
+                },
+                /* Called when each requested web font has finished loading. The fontFamily parameter is the name of the font family, and fontDescription represents the style and weight of the font. */
+                fontactive: function(fontFamily, fontDescription) {
+                    // do something
+                },
+                /* Called if a requested web font failed to load. The fontFamily parameter is the name of the font family, and fontDescription represents the style and weight of the font. */
+                fontinactive: function(fontFamily, fontDescription) {
+                    // do something
+                },
+                /* Called when all of the web fonts have either finished loading or failed to load, as long as at least one loaded successfully. */
+                active: function() {
+                    setTimeout(function(){
+                        Site.fontsDidActivate();
+                    }, 250);
+                },
+                /* Called if the browser does not support web fonts or if none of the fonts could be loaded. */
+                inactive: function() {
+                    setTimeout(function(){
+                        Site.fontsDidActivate();
+                    }, 250);
+                }
+            };
+        </script>
+
+        <!-- Self hosting this part, for Ghostery's sake -->
+        <script src="static/js/third-party/google/WebFontLoader.js"></script>
+    </body>
+</html>
